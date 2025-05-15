@@ -1,6 +1,6 @@
-# Railway Redeployment Guide
+# Railway Redeployment Guide (Updated May 15, 2025)
 
-Follow these steps to redeploy your WebReader application on Railway with the fixes for the content extraction issues.
+Follow these steps to redeploy your WebReader application on Railway with the fixes for both the content extraction issues and the healthcheck failures.
 
 ## 1. Update Your Deployment on Railway
 
@@ -33,7 +33,7 @@ After deployment is complete:
 
 ## 3. What's Fixed in This Deployment
 
-The latest changes include a robust fallback system that should resolve the "No content found on this page" issue:
+The latest changes include several improvements for Railway deployment:
 
 1. **Dynamic Proxy System**:
    - The app now automatically tries multiple CORS proxies if the internal one fails
@@ -46,6 +46,16 @@ The latest changes include a robust fallback system that should resolve the "No 
 3. **Railway-Specific Configuration**:
    - Added Railway configuration files
    - Set up environment detection to use appropriate settings on Railway
+
+4. **Healthcheck Fixes**:
+   - Added multiple health check endpoints at `/health`, `/healthz`, `/readiness`, and `/liveness`
+   - Created boot script (`railway-boot.sh`) to handle startup issues
+   - Added CommonJS server version for better compatibility
+   - Updated server port binding to listen on all interfaces
+
+5. **Improved Logging**:
+   - Server now logs to a file for better debugging
+   - Added healthcheck verification script
 
 ## 4. If Issues Persist
 
@@ -65,6 +75,24 @@ Railway provides excellent logging capabilities:
 3. Select the current deployment
 4. Click "View Logs" to see runtime logs
 5. Look for "[PROXY]" prefixed messages which show the content extraction process
+6. Look for "[HEALTH]" messages showing health check activity
+
+## 6. Testing Locally Before Deployment
+
+You can test the Railway configuration locally before deploying:
+
+1. Run the included PowerShell script:
+   ```powershell
+   .\test-railway-local.ps1
+   ```
+
+2. This will:
+   - Simulate the Railway environment
+   - Build the project
+   - Start the server using the Railway-compatible configuration
+   - Test the health endpoints
+
+3. Access the health check endpoint at http://localhost:3001/healthz
 
 ## Next Steps
 

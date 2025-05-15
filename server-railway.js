@@ -84,7 +84,25 @@ app.get('/health', (req, res) => {
 
 // Root health check endpoint - this is what Railway will check
 app.get('/healthz', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  console.log('[HEALTH] Health check requested at /healthz');
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    railway_env: process.env.RAILWAY_ENVIRONMENT || 'not_set',
+    port: process.env.PORT || '3000'
+  });
+});
+
+// Also add /readiness and /liveness endpoints for Kubernetes-style health checks
+app.get('/readiness', (req, res) => {
+  console.log('[HEALTH] Readiness check requested');
+  res.status(200).json({ status: 'ready', timestamp: new Date().toISOString() });
+});
+
+app.get('/liveness', (req, res) => {
+  console.log('[HEALTH] Liveness check requested');
+  res.status(200).json({ status: 'alive', timestamp: new Date().toISOString() });
 });
 
 // Also respond to root with a health check
@@ -92,7 +110,12 @@ app.get('/', (req, res, next) => {
   // If requesting root path directly for health check
   const acceptHeader = req.headers.accept || '';
   if (acceptHeader.includes('application/json')) {
-    return res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+    console.log('[HEALTH] Health check requested at root path');
+    return res.status(200).json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      message: 'WebReader API is running. Use /healthz for full health check.'
+    });
   }
   // Otherwise continue to serve the app
   next();
