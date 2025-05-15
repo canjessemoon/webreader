@@ -1,5 +1,10 @@
 # WebReader: Website Content Text-to-Speech App
 
+![WebReader](https://img.shields.io/badge/WebReader-v1.0-blue)
+![React](https://img.shields.io/badge/React-18.x-61dafb)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-38bdf8)
+
 WebReader is a web application that extracts the main content from any website and reads it aloud using text-to-speech technology. The app provides a clean, accessible interface with extensive customization options to enhance the reading experience.
 
 ## Features
