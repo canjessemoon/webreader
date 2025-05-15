@@ -3,16 +3,17 @@ import * as cheerio from 'cheerio';
 import { convert } from 'html-to-text';
 import { getProxyUrl, cycleProxy } from './proxyService';
 
+// Get the current API URL from proxyService
+// This allows for dynamic switching if the internal proxy fails
+const getApiUrl = () => getProxyUrl();
+
 // Function to extract the main content from a website
 export const extractContent = async (url: string): Promise<string> => {
-  // Get the current API URL from proxyService
-  const API_URL = getProxyUrl();
-  
   try {
     console.log(`Extracting content from URL: ${url}`);
     console.log(`Using API endpoint: ${API_URL}${url}`);
     
-    // Make the request with the appropriate proxy
+    // Add CORS proxy if needed for the final solution
     const response = await axios.get(`${API_URL}${url}`, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -93,22 +94,8 @@ export const extractContent = async (url: string): Promise<string> => {
         throw new Error(`Network error. Please check your connection and try again.`);
       }
     }
-      // Try with a different proxy if the current one failed
-    if (axios.isAxiosError(error) && 
-        (error.message.includes('Network Error') || 
-         error.response?.status === 403 || 
-         error.response?.status === 500 ||
-         error.response?.status === 0)) {
-        
-      console.log('Trying with a different proxy service...');
-      const newProxyUrl = cycleProxy();
-      console.log(`Switched to proxy: ${newProxyUrl}`);
-      
-      // Try again with the new proxy
-      return extractContent(url);
-    }
     
-    // Safe error handling for all other cases
+    // Safe error handling
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     throw new Error(`Failed to extract content: ${errorMessage}`);
   }
