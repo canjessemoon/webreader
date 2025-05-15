@@ -4,8 +4,8 @@ import './App.css';
 // Components
 import Header from './components/Header';
 import UrlInput from './components/UrlInput';
-// Using the wrapped version with better padding support
-import ContentDisplay from './components/ContentDisplay.withWrapper';
+// Using the fixed ContentDisplay component
+import ContentDisplay from './components/ContentDisplay';
 import TTSControls from './components/TTSControls';
 import VoiceSettings from './components/VoiceSettings';
 import AppearanceSettings from './components/AppearanceSettings';

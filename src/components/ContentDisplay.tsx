@@ -8,6 +8,10 @@ interface ContentDisplayProps {
   fontSize: string;
 }
 
+/**
+ * Content Display component with multiple wrapper layers to ensure proper padding
+ * This component displays the extracted content with different states
+ */
 const ContentDisplay: React.FC<ContentDisplayProps> = ({
   content,
   status,
@@ -57,98 +61,99 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({
         });
       }
     }
-  }, [activeParagraphIndex]);  // CSS styles for consistent readability 
-  // Using direct inline styles instead of variables for stronger application  
+  }, [activeParagraphIndex]);
+  
+  // CSS styles for consistent readability
   const contentParagraphStyles: React.CSSProperties = {
     maxWidth: "65ch",
     margin: "0 auto",
     lineHeight: "1.8",
     padding: "0",
     width: "100%",
-    boxSizing: "border-box"
-  };    return (
-    <div className="content-outer-wrapper" style={{
-      width: '100%',
-      maxWidth: '800px',
-      margin: '0 auto',
-      padding: '48px 32px',
-      boxSizing: 'border-box'
-    }}>  
+    boxSizing: "border-box",
+    fontSize
+  };
+  
+  // Outer wrapper styles - ensures consistent padding
+  const outerWrapperStyles: React.CSSProperties = {
+    width: '100%',
+    maxWidth: '800px',
+    margin: '0 auto',
+    padding: '48px 32px',
+    boxSizing: 'border-box',
+    display: 'block'
+  };
+  
+  // Container styles - applies to all state variations
+  const containerStyles: React.CSSProperties = {
+    padding: '48px 32px',
+    boxSizing: 'border-box',
+    width: '100%',
+    maxWidth: '800px',
+    margin: '0 auto',
+    display: 'block',
+    backgroundColor: 'white'
+  };
+  
+  // Content wrapper styles - consistent margin/padding for state containers
+  const contentWrapperStyles: React.CSSProperties = {
+    width: '100%',
+    maxWidth: '700px',
+    margin: '0 auto',
+    padding: '0',
+    display: 'block'
+  };
+  
+  return (
+    <div className="content-outer-wrapper" style={outerWrapperStyles}>
       <div 
         id="content-wrapper"
         className="bg-white dark:bg-gray-900 rounded-lg shadow-md mb-6 overflow-y-auto custom-scrollbar h-[calc(100vh-400px)] md:h-[calc(100vh-300px)] mx-auto content-container" 
-        style={{
-          padding: '48px 32px',
-          boxSizing: 'border-box',
-          width: '100%',
-          maxWidth: '800px',
-          display: 'block'
-        }}
-      >{status === ReadingStatus.Loading && (
-        <div className="flex items-center justify-center h-full text-container" style={{
-          padding: '48px 32px',
-          width: '100%',
-          maxWidth: '700px',
-          margin: '0 auto',
-          display: 'block'
-        }}>
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 dark:border-gray-700 border-t-blue-500 dark:border-t-blue-400"></div>
-          <span className="ml-4 text-gray-600 dark:text-gray-300 text-lg">Loading content...</span>
-        </div>
-      )}
-      
-      {status === ReadingStatus.Error && (
-        <div className="text-center text-red-600 dark:text-red-400 py-12 text-container" style={{
-          padding: '48px 32px',
-          width: '100%',
-          maxWidth: '700px',
-          margin: '0 auto',
-          display: 'block'
-        }}>
-          <p className="text-2xl mb-3 font-semibold content-text">Failed to extract content</p>
-          <p className="text-gray-600 dark:text-gray-400 max-w-lg mx-auto content-text">
-            Please check the URL and try again. The website might be blocking content extraction or require authentication.
-          </p>
-        </div>
-      )}
-      
-      {isReady && content === '' && (
-        <div className="text-center text-gray-500 dark:text-gray-400 py-12 text-container" style={{
-          padding: '48px 32px',
-          width: '100%',
-          maxWidth: '700px',
-          margin: '0 auto',
-          display: 'block'
-        }}>
-          <p className="text-lg content-text">No content found on this page.</p>
-        </div>
-      )}{isReady && content !== '' && (
-        <div 
-          ref={contentRef} 
-          className="text-gray-800 dark:text-gray-100 space-y-5 mx-auto text-container"
-          style={{
-            width: '100%',
-            maxWidth: '700px',
-            margin: '0 auto',
-            padding: '0',
-            display: 'block'
-          }}
-        >
-          {processedParagraphs.map((paragraph, index) => (
-            <p 
-              key={index} 
-              className={`leading-relaxed transition-all duration-300 content-text ${paragraph.isActive ? 'highlight-text' : ''}`}
-              style={{
-                ...contentParagraphStyles,
-                fontSize: fontSize,
-                marginBottom: '1.5em'
-              }}
-            >
-              {paragraph.text}
+        style={containerStyles}
+      >
+        {status === ReadingStatus.Loading && (
+          <div className="flex items-center justify-center h-full text-container" style={contentWrapperStyles}>
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 dark:border-gray-700 border-t-blue-500 dark:border-t-blue-400"></div>
+            <span className="ml-4 text-gray-600 dark:text-gray-300 text-lg">Loading content...</span>
+          </div>
+        )}
+        
+        {status === ReadingStatus.Error && (
+          <div className="text-center text-red-600 dark:text-red-400 py-12 text-container" style={contentWrapperStyles}>
+            <p className="text-2xl mb-3 font-semibold content-text">Failed to extract content</p>
+            <p className="text-gray-600 dark:text-gray-400 max-w-lg mx-auto content-text">
+              Please check the URL and try again. The website might be blocking content extraction or require authentication.
             </p>
-          ))}
-        </div>
-      )}
+          </div>
+        )}
+        
+        {isReady && content === '' && (
+          <div className="text-center text-gray-500 dark:text-gray-400 py-12 text-container" style={contentWrapperStyles}>
+            <p className="text-lg content-text">No content found on this page.</p>
+          </div>
+        )}
+        
+        {isReady && content !== '' && (
+          <div 
+            ref={contentRef} 
+            className="text-gray-800 dark:text-gray-100 space-y-5 mx-auto text-container"
+            style={contentWrapperStyles}
+          >
+            {processedParagraphs.map((paragraph, index) => (
+              <p 
+                key={index} 
+                className={`leading-relaxed transition-all duration-300 content-text ${paragraph.isActive ? 'highlight-text' : ''}`}
+                style={{
+                  ...contentParagraphStyles,
+                  marginBottom: '1.5em'
+                }}
+              >
+                {paragraph.text}
+              </p>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
