@@ -105,10 +105,9 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({
   };
   
   return (
-    <div className="content-outer-wrapper" style={outerWrapperStyles}>
-      <div 
+    <div className="content-outer-wrapper" style={outerWrapperStyles}>      <div 
         id="content-wrapper"
-        className="bg-white dark:bg-gray-900 rounded-lg shadow-md mb-6 overflow-y-auto custom-scrollbar h-[calc(100vh-400px)] md:h-[calc(100vh-300px)] mx-auto content-container" 
+        className="bg-white dark:bg-gray-900 rounded-lg shadow-md mb-6 overflow-y-auto custom-scrollbar h-[calc(100vh-450px)] md:h-[calc(100vh-350px)] mx-auto content-container" 
         style={containerStyles}
       >
         {status === ReadingStatus.Loading && (

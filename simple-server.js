@@ -36,6 +36,7 @@ const server = http.createServer(async (req, res) => {
   
   // Handle API proxy request
   if (req.url?.startsWith('/api/proxy')) {
+    console.log('API proxy request received:', req.url);
     return handleProxyRequest(req, res);
   }
   
@@ -93,8 +94,15 @@ async function handleProxyRequest(req, res) {
   const parsedUrl = new URL(req.url || '/', `http://${req.headers.host}`);
   const targetUrl = parsedUrl.searchParams.get('url');
   
+  // Add CORS headers to all responses
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, User-Agent'
+  };
+  
   if (!targetUrl) {
-    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.writeHead(400, { 'Content-Type': 'application/json', ...corsHeaders });
     res.end(JSON.stringify({ error: 'URL parameter is required' }));
     return;
   }
@@ -103,19 +111,28 @@ async function handleProxyRequest(req, res) {
     console.log(`Fetching content from: ${targetUrl}`);
     const response = await axios.get(targetUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Referer': 'https://www.google.com/'
       },
-      responseType: 'text'
+      responseType: 'text',
+      timeout: 10000 // 10 second timeout
     });
     
-    res.writeHead(200, { 'Content-Type': 'text/html' });
+    console.log(`Content received from ${targetUrl}, size: ${response.data.length} bytes`);
+    res.writeHead(200, { 'Content-Type': 'text/html', ...corsHeaders });
     res.end(response.data);
   } catch (error) {
     console.error('Error fetching URL:', error);
-    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.writeHead(500, { 'Content-Type': 'application/json', ...corsHeaders });
     res.end(JSON.stringify({ 
       error: 'Failed to fetch URL', 
-      message: error.message 
+      message: error.message,
+      details: error.response ? {
+        status: error.response.status,
+        statusText: error.response.statusText
+      } : 'No response details'
     }));
   }
 }

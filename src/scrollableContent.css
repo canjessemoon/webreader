@@ -1,0 +1,58 @@
+/**
+ * Enhanced scrollable content styles for WebReader
+ * These styles improve the scrolling behavior of content 
+ * and ensure reading controls remain visible
+ */
+
+/* Make sure content stays in its container with smooth scrolling */
+.content-container {
+  overflow-y: auto !important;
+  scrollbar-width: thin !important; 
+  scroll-behavior: smooth !important;
+  margin-bottom: 2rem !important; /* Extra spacing at the bottom */
+}
+
+/* Ensure the content wrapper has a fixed height with proper overflow */
+#content-wrapper {
+  height: calc(100vh - 450px) !important; /* Base height for mobile */
+  max-height: 60vh !important; /* Cap the height */
+  min-height: 300px !important; /* Ensure it's not too small */
+  overflow-y: auto !important;
+}
+
+/* Media query for larger screens */
+@media (min-width: 768px) {
+  #content-wrapper {
+    height: calc(100vh - 350px) !important; /* Adjusted height for desktop */
+  }
+}
+
+/* Custom scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px !important; 
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-radius: 4px !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(59, 130, 246, 0.5) !important;
+  border-radius: 4px !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(59, 130, 246, 0.7) !important;
+}
+
+/* Add padding to the bottom of content to prevent cut-off */
+.text-container {
+  padding-bottom: 2rem !important;
+}
+
+/* Ensure active paragraph is fully visible when scrolling */
+.highlight-text {
+  scroll-margin-top: 2rem !important;
+  scroll-margin-bottom: 2rem !important;
+}

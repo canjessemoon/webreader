@@ -39,27 +39,58 @@ WebReader is a web application that extracts the main content from any website a
 - **Content Extraction**: Axios, Cheerio, html-to-text
 - **Text-to-Speech**: Web Speech API
 - **CORS Proxy**: Express.js backend server
-```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Latest Updates (May 2025)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Fixed build errors preventing deployment
+- Fixed CORS issues with content extraction in production environment
+- Improved scrollable content layout to prevent overlap with reading controls
+- Added enhanced styling for better user experience
+- Fixed various TypeScript errors and type safety improvements
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
+## Quick Start
+
+1. **Install Dependencies**
+   ```bash
+   npm install
+   cd server && npm install
+   cd ..
+   ```
+
+2. **Development Mode**
+   ```bash
+   npm run dev:all
+   ```
+   This will start both the Vite development server and the API proxy server.
+
+3. **Production Build**
+   ```bash
+   npm run build
+   npm run start
+   ```
+   This builds the application and starts the simple server that handles both static files and API requests.
+
+## Deployment Options
+
+WebReader supports multiple deployment options:
+
+1. **Simple Node.js Server (Recommended)**
+   - Uses `simple-server.js` for both static files and API proxying
+   - Single process, simple setup
+   - Command: `npm run start`
+
+2. **Express Server**
+   - Uses `server.cjs` with Express
+   - More configurable, supports middleware
+   - Command: `npm run start:express`
+
+3. **Vercel Deployment**
+   - Configured with `vercel.json` and API endpoint in `/api/proxy.js`
+   - See `DEPLOYMENT.md` for detailed instructions
+
+4. **Custom Platform**
+   - See `PLATFORMLESS_DEPLOYMENT.md` for platform-agnostic deployment
+
 ## Getting Started
 
 ### Prerequisites
@@ -103,6 +134,12 @@ npm run build
 4. Adjust voice settings and appearance as needed
 5. Use the controls to pause, resume, or stop the reading
 
+## Known Issues and Fixes
+
+- If content extraction fails with "No content found", check your CORS proxy configuration
+- For scrolling issues on mobile devices, adjust the viewport settings in `index.html`
+- For build issues, check that TypeScript is properly configured
+
 ## Limitations
 
 - Some websites may block content extraction through their security policies
@@ -117,7 +154,10 @@ npm run build
 - Support for PDF documents
 - More advanced text processing for better content extraction
 
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-```

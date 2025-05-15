@@ -9,6 +9,7 @@ import './fixPadding.css' // Emergency padding fixes with maximum specificity
 import './allStatesStyles.css' // Styles for all content states
 import './initialStateStyles.css' // Styles for initial empty state
 import './rootStyles.css' // Root-level styles with highest specificity
+import './scrollableContent.css' // Enhanced scrolling behavior for content
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
