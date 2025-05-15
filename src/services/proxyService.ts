@@ -4,7 +4,9 @@
 // Detect if we're running in production (Railway)
 const isProduction = typeof window !== 'undefined' && 
                      window.location && 
-                     window.location.hostname.includes('railway.app');
+                     (window.location.hostname.includes('railway.app') || 
+                      window.location.hostname === 'webreader-production.up.railway.app' ||
+                      window.location.hostname.includes('.up.railway.app'));
 
 // List of public CORS proxies that can be used as fallbacks
 const PUBLIC_PROXIES = [
