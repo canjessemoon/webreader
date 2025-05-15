@@ -3,9 +3,7 @@ import * as cheerio from 'cheerio';
 import { convert } from 'html-to-text';
 
 // API URL for our backend proxy service
-const API_URL = import.meta.env.DEV 
-  ? 'http://localhost:3001/api/proxy?url=' 
-  : '/api/proxy?url=';
+const API_URL = '/api/proxy?url=';
 
 // Function to extract the main content from a website
 export const extractContent = async (url: string): Promise<string> => {

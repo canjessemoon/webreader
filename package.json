@@ -11,11 +11,14 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "install:server": "cd server && npm install",
-    "start": "node server/index.js"
+    "start": "node server.js",
+    "start:legacy": "node server/index.js"
   },
   "dependencies": {
     "axios": "^1.9.0",
     "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "html-to-text": "^9.0.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
