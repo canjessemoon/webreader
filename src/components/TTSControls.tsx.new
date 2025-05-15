@@ -1,0 +1,205 @@
+// filepath: c:\Users\user\OneDrive\Programming-Projects\webreader\src\components\TTSControls.tsx
+import React from 'react';
+import { FiPlay, FiPause, FiSquare, FiSkipForward, FiVolume2 } from 'react-icons/fi';
+import { ReadingStatus } from '../types';
+
+interface TTSControlsProps {
+  status: ReadingStatus;
+  onPlay: () => void;
+  onPause: () => void;
+  onStop: () => void;
+  onSkip: () => void;
+  settings: {
+    volume: number;
+    rate: number; 
+    pitch: number;
+  };
+  onSettingsChange: (setting: 'volume' | 'rate' | 'pitch', value: number) => void;
+}
+
+// Custom slider component with inline styles
+const SliderControl = ({ 
+  min, 
+  max, 
+  step, 
+  value,
+  onChange,
+  label,
+  valueLabel,
+  leftLabel,
+  rightLabel
+}: {
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  onChange: (value: number) => void;
+  label: string | React.ReactNode;
+  valueLabel?: string;
+  leftLabel?: string;
+  rightLabel?: string;
+}) => {
+  // Calculate percentage for filled track
+  const percentage = ((value - min) / (max - min)) * 100;
+  
+  return (
+    <div className="mb-6">
+      <div className="flex items-center justify-between mb-2">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+          {label}
+        </label>
+        {valueLabel && (
+          <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+            {valueLabel}
+          </span>
+        )}
+      </div>
+      
+      <div className="relative h-16 flex items-center px-2">
+        <div 
+          className="absolute left-2 right-2 h-6 bg-gray-200 dark:bg-gray-700 rounded-full"
+          style={{ top: '50%', transform: 'translateY(-50%)' }}
+        ></div>
+        
+        <div 
+          className="absolute left-2 h-6 bg-blue-500 rounded-l-full" 
+          style={{ 
+            width: `${percentage}%`,
+            top: '50%',
+            transform: 'translateY(-50%)'
+          }}
+        ></div>
+        
+        <div 
+          className="absolute w-12 h-12 bg-blue-600 rounded-full shadow-lg border-2 border-white dark:border-gray-800 flex items-center justify-center"
+          style={{ 
+            left: `calc(${percentage}% - 24px + 8px)`,
+            top: '50%',
+            transform: 'translateY(-50%)'
+          }}
+        >
+          <div className="w-2 h-7 bg-white dark:bg-gray-200 rounded-full"></div>
+        </div>
+        
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(parseFloat(e.target.value))}
+          className="absolute inset-0 w-full opacity-0 cursor-pointer z-10"
+          style={{ margin: 0, height: '100%' }}
+        />
+      </div>
+      
+      {(leftLabel || rightLabel) && (
+        <div className="flex justify-between mt-1">
+          {leftLabel && <span className="text-xs text-gray-500">{leftLabel}</span>}
+          {rightLabel && <span className="text-xs text-gray-500">{rightLabel}</span>}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const TTSControls: React.FC<TTSControlsProps> = ({
+  status,
+  onPlay,
+  onPause,
+  onStop,
+  onSkip,
+  settings,
+  onSettingsChange,
+}) => {
+  const isPlaying = status === ReadingStatus.Reading;
+  const isPaused = status === ReadingStatus.Paused;
+  const isReady = status === ReadingStatus.Ready || status === ReadingStatus.Paused || status === ReadingStatus.Reading;
+  
+  return (
+    <div className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-md">
+      <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Reading Controls</h2>
+      
+      {/* Main controls in a nice row */}
+      <div className="flex items-center justify-center gap-4 mb-6">
+        <button
+          onClick={isPlaying ? onPause : onPlay}
+          disabled={!isReady}
+          className={`p-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+            isReady
+              ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg transform hover:-translate-y-1'
+              : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+          }`}
+          aria-label={isPlaying ? 'Pause' : 'Play'}
+        >
+          {isPlaying ? <FiPause size={28} /> : <FiPlay size={28} />}
+        </button>
+        
+        <button
+          onClick={onStop}
+          disabled={!(isPlaying || isPaused)}
+          className={`p-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+            isPlaying || isPaused
+              ? 'bg-red-600 text-white hover:bg-red-700 shadow-md hover:shadow-lg transform hover:-translate-y-1'
+              : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+          }`}
+          aria-label="Stop"
+        >
+          <FiSquare size={28} />
+        </button>
+        
+        <button
+          onClick={onSkip}
+          disabled={!isPlaying}
+          className={`p-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+            isPlaying
+              ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg transform hover:-translate-y-1'
+              : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+          }`}
+          aria-label="Skip paragraph"
+        >
+          <FiSkipForward size={28} />
+        </button>
+      </div>
+      
+      {/* Sliders with custom implementation */}
+      <div className="space-y-6 max-w-lg mx-auto">
+        <SliderControl
+          min={0}
+          max={1}
+          step={0.1}
+          value={settings.volume}
+          onChange={(value) => onSettingsChange('volume', value)}
+          label={<span className="flex items-center"><FiVolume2 size={18} className="mr-2" />Volume</span>}
+          valueLabel={`${Math.round(settings.volume * 10)}/10`}
+        />
+        
+        <SliderControl
+          min={0.5}
+          max={2}
+          step={0.1}
+          value={settings.rate}
+          onChange={(value) => onSettingsChange('rate', value)}
+          label="Reading Speed"
+          valueLabel={`${settings.rate.toFixed(1)}x`}
+          leftLabel="Slower"
+          rightLabel="Faster"
+        />
+        
+        <SliderControl
+          min={0.5}
+          max={2}
+          step={0.1}
+          value={settings.pitch}
+          onChange={(value) => onSettingsChange('pitch', value)}
+          label="Voice Pitch"
+          valueLabel={`${settings.pitch.toFixed(1)}`}
+          leftLabel="Lower"
+          rightLabel="Higher"
+        />
+      </div>
+    </div>
+  );
+};
+
+export default TTSControls;

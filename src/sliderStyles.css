@@ -1,0 +1,75 @@
+/* Custom slider styles with !important declarations */
+input[type='range'] {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 8px; /* Specified height */
+  background: #e2e8f0; /* Grey background */
+  border-radius: 5px; /* Rounded corners */
+  outline: none; /* Remove outline */
+}
+
+/* Style for Webkit/Blink browsers (Chrome, Safari, newer versions of Opera) */
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none !important; /* Override default look */
+  appearance: none !important;
+  width: 32px !important; /* Set a specific slider handle width */
+  height: 32px !important; /* Slider handle height */
+  border-radius: 50% !important; /* Round corners */
+  background: #3b82f6 !important; /* Blue background */
+  cursor: pointer !important; /* Cursor on hover */
+  margin-top: -12px !important; /* Centers the thumb on the track */
+  border: 3px solid white !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Style for Firefox browsers */
+input[type='range']::-moz-range-thumb {
+  width: 32px !important; /* Set a specific slider handle width */
+  height: 32px !important; /* Slider handle height */
+  border-radius: 50% !important; /* Round corners */
+  background: #3b82f6 !important; /* Blue background */
+  cursor: pointer !important; /* Cursor on hover */
+  border: 3px solid white !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* For Edge */
+input[type='range']::-ms-thumb {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: #3b82f6 !important;
+  cursor: pointer !important;
+  border: 3px solid white !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Dark mode versions */
+html.dark input[type='range'] {
+  background: #4b5563;
+}
+
+html.dark input[type='range']::-webkit-slider-thumb {
+  border-color: #1f2937 !important;
+}
+
+html.dark input[type='range']::-moz-range-thumb {
+  border-color: #1f2937 !important;
+}
+
+html.dark input[type='range']::-ms-thumb {
+  border-color: #1f2937 !important;
+}
+
+/* Adjust content padding */
+.content-container {
+  padding: 32px !important;
+}
+
+.content-paragraph {
+  padding: 16px !important;
+  max-width: 600px !important;
+  margin: 0 auto !important;
+  line-height: 1.8 !important;
+}

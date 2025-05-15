@@ -1,0 +1,41 @@
+/**
+ * Critical styles for the initial state of the content container
+ * These styles are focused on ensuring padding exists even when no content is loaded
+ */
+
+/* Target the initial state specifically */
+.content-container:empty,
+.content-container:not(:has(div)),
+.content-container:not(:has(p)) {
+  padding: 48px 32px !important;
+  min-height: 300px !important; 
+  display: block !important;
+  width: 100% !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Initial state container */
+main > .content-container {
+  padding: 48px 32px !important;
+  margin: 0 auto !important;
+}
+
+/* Ensure all direct children of main get proper margin */
+main > * {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 800px !important;
+}
+
+/* Ensure UrlInput doesn't affect content padding */
+main > *:first-child + .content-container {
+  padding: 48px 32px !important;
+}
+
+/* Ensure minimum height of content area */
+.h-\[calc\(100vh-400px\)\],
+.h-\[calc\(100vh-300px\)\] {
+  min-height: 300px !important;
+}

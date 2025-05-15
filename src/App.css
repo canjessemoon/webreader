@@ -1,0 +1,93 @@
+/* WebReader App Styles */
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure dark mode affects all elements properly */
+html.dark body {
+  background-color: rgb(17, 24, 39);
+  color: rgb(243, 244, 246);
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Content animation */
+.animate-in {
+  animation: fade-in 0.5s ease forwards, slide-up 0.5s ease forwards;
+}
+
+/* Range input styling for consistent cross-browser appearance */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  outline: none;
+  background: transparent; /* Make the default track invisible */
+  margin-top: 5px; /* Add some margin for better positioning */
+}
+
+/* Content display styling for better readability */
+.max-w-prose {
+  max-width: 65ch !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Custom large slider thumb */
+.custom-slider {
+  height: 10px !important;
+}
+
+.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: #3b82f6 !important;
+  cursor: pointer !important;
+  border: 3px solid white !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.custom-slider::-moz-range-thumb {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: #3b82f6 !important;
+  cursor: pointer !important;
+  border: 3px solid white !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Dark mode version of the slider */
+.dark .custom-slider::-webkit-slider-thumb {
+  border-color: #1f2937 !important;
+}
+
+.dark .custom-slider::-moz-range-thumb {
+  border-color: #1f2937 !important;
+}

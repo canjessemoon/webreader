@@ -1,0 +1,119 @@
+
+/**
+ * Custom CSS for WebReader sliders
+ * This uses a more direct approach with stronger selectors
+ */
+
+/* Base slider styles */
+.slider-container {
+  position: relative !important;
+  width: 100% !important;
+  height: 30px !important;
+  margin: 10px 0 !important;
+}
+
+/* Custom slider track */
+.slider-track {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  height: 8px !important;
+  width: 100% !important;
+  background-color: #e5e7eb !important;
+  border-radius: 4px !important;
+}
+
+.dark .slider-track {
+  background-color: #4b5563 !important;
+}
+
+/* Filled portion of the track */
+.slider-fill {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  height: 8px !important;
+  background-color: #3b82f6 !important;
+  border-radius: 4px 0 0 4px !important;
+}
+
+/* Slider knob */
+.slider-knob {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 32px !important;
+  height: 32px !important;
+  background-color: #3b82f6 !important;
+  border: 3px solid white !important;
+  border-radius: 50% !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10 !important;
+}
+
+.dark .slider-knob {
+  border-color: #1f2937 !important;
+}
+
+/* Line in the middle of knob */
+.slider-knob-line {
+  width: 2px !important;
+  height: 14px !important;
+  background-color: white !important;
+  border-radius: 1px !important;
+}
+
+/* Override input[type=range] completely */
+input[type="range"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  height: 30px !important; /* Bigger target area */
+}
+
+/* Force native slider thumb to be completely invisible */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  width: 32px !important;
+  height: 32px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Force native slider track to be completely invisible */
+input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent !important;
+  height: 0 !important;
+  border: none !important;
+}
+
+/* Adjust content container styling directly with stronger rules */
+.content-container {
+  padding: 48px !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Specific styling for the content wrapper div */
+.content-container > div[ref="contentRef"] {
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.content-text {
+  max-width: 65ch !important;
+  margin: 0 auto !important;
+  margin-bottom: 1.5em !important;
+  line-height: 1.8 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}

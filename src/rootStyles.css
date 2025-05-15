@@ -1,0 +1,32 @@
+/**
+ * Root-level styles for consistent padding across the app
+ * Including direct styling of custom-scrollbar class
+ */
+
+/* Custom scrollbar itself needs padding */
+.custom-scrollbar {
+  padding: 48px 32px !important;
+  box-sizing: border-box !important;
+}
+
+/* Special high-specificity selectors targeting the base elements */
+body main .bg-white.rounded-lg.shadow-md.mb-6,
+body main .bg-white.dark\:bg-gray-900.rounded-lg.shadow-md.mb-6,
+body main div[class*="rounded-lg"][class*="shadow-md"][class*="overflow-y-auto"] {
+  padding: 48px 32px !important;
+  box-sizing: border-box !important;
+  max-width: 800px !important;
+  width: 100% !important;
+}
+
+/* Root of app needs proper width constraints */
+#root {
+  max-width: 100vw !important;
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* Force sibling elements to have proper padding */
+.mb-6 {
+  padding: 48px 32px !important;
+}

@@ -1,0 +1,67 @@
+/**
+ * Styles that apply to ALL states of the ContentDisplay component
+ * This includes Loading, Error, Empty, and Content states
+ */
+
+/* Force content container padding in all states using combinator selectors */
+.content-container {
+  padding: 48px 32px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 800px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
+  min-height: 300px !important;
+}
+
+/* Force padding on state-specific containers */
+.content-container > div,
+.content-container > div[class*="flex"],
+.content-container > div[class*="text-center"],
+.content-container > div[class*="mx-auto"] {
+  width: 100% !important;
+  max-width: 700px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+/* Ensure all paragraphs get proper spacing, regardless of which state they're in */
+p {
+  margin-bottom: 1.5em !important;
+}
+
+/* Ensure we have padding even when the container is empty */
+.content-container:empty {
+  padding: 48px 32px !important;
+  min-height: 300px !important;
+}
+
+/* Style specifically the loading state */
+.content-container > .flex.items-center.justify-center.h-full {
+  height: 300px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 48px 32px !important;
+}
+
+/* Style specifically the error state */
+.content-container > .text-center.text-red-600,
+.content-container > .text-center.text-gray-500 {
+  padding: 48px 32px !important;
+  min-height: 300px !important;
+}
+
+/* Add padding enforcement as attribute selectors for highest specificity */
+div[id="content-wrapper"] {
+  padding: 48px 32px !important;
+}
+
+/* Handle transitional states by applying padding to any direct child */
+.content-container > * {
+  padding: 0 !important;
+  max-width: 700px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}

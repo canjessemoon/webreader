@@ -1,0 +1,76 @@
+/**
+ * Emergency padding fixes with maximum specificity
+ * These rules use high specificity selectors and !important flags
+ */
+
+/* Target container with nested selectors for maximum specificity */
+.bg-white.dark\:bg-gray-900.rounded-lg.shadow-md.mb-6.overflow-y-auto.custom-scrollbar.content-container,
+div[class*="content-container"],
+.content-container {
+  padding: 48px 32px !important;
+  box-sizing: border-box !important;
+  border: none !important;
+  width: 100% !important;
+  max-width: 800px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Target content wrapper - use attribute selector for higher specificity */
+div[ref="contentRef"],
+.text-container,
+.content-container > div {
+  width: 100% !important;
+  max-width: 700px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+/* Target paragraphs with attribute selectors */
+p[class*="content-text"],
+.content-text,
+.text-container p {
+  max-width: 65ch !important;
+  padding: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 1.5em !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Handle box model explicitly */
+* {
+  box-sizing: border-box !important;
+}
+
+/* Override any potential specificity issues */
+body .content-container {
+  padding: 48px 32px !important;
+}
+
+/* Fix any flex layout issues */
+.content-container > div {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Address overflow issues */
+.content-container {
+  overflow: visible !important;
+}
+
+.content-container > * {
+  overflow: visible !important;
+}
+
+/* Remove any potential margin collapse */
+.content-container::before,
+.content-container::after {
+  content: " " !important;
+  display: table !important;
+}
+
+.content-container::after {
+  clear: both !important;
+}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebReader - Read Web Content Aloud</title>
+    <!-- Critical styles with max specificity applied before any other CSS -->
+    <style>
+      /* Ensure padding is applied to content container */
+      html body .content-container,
+      div.content-container,
+      [class*="content-container"],
+      #content-wrapper {
+        padding: 48px 32px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 800px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+      
+      /* Fix paragraph container */
+      .text-container,
+      div[ref="contentRef"] {
+        width: 100% !important;
+        max-width: 700px !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+      }
+      
+      /* Fix paragraph styling */
+      p.content-text {
+        max-width: 65ch !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        margin-bottom: 1.5em !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

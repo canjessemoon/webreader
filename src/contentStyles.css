@@ -1,0 +1,50 @@
+/**
+ * Content-specific styles for the WebReader application
+ * This file handles the styling of the main content display
+ */
+
+/* Container */
+.content-container {
+  padding: 48px !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Content wrapper (direct child of content-container) */
+.content-container > div {
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Individual paragraphs */
+.content-text {
+  max-width: 65ch !important;
+  margin: 0 auto 1.5em !important;
+  line-height: 1.8 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+/* Container for the text paragraphs */
+.text-container {
+  width: 100% !important;
+  max-width: 700px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+/* Ensure proper spacing between paragraphs */
+p.content-text {
+  padding-bottom: 1em !important;
+}
+
+/* Active paragraph highlighting */
+.highlight-text {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  border-left: 4px solid #3b82f6 !important;
+  padding-left: 16px !important;
+  margin-left: -20px !important;
+}
