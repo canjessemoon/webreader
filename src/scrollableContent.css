@@ -2,6 +2,11 @@
  * Enhanced scrollable content styles for WebReader
  * These styles improve the scrolling behavior of content 
  * and ensure reading controls remain visible
+ * 
+ * Added in May 2025 update to fix layout issues:
+ * - Prevents text content from overlapping with reading controls
+ * - Improves scrolling behavior on all devices
+ * - Adds proper spacing for highlighted paragraphs
  */
 
 /* Make sure content stays in its container with smooth scrolling */
