@@ -1,11 +1,8 @@
-import express from 'express';
-import cors from 'cors';
-import axios from 'axios';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// CommonJS version of server.js for Railway deployment
+const express = require('express');
+const cors = require('cors');
+const axios = require('axios');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -56,7 +53,8 @@ app.get('/api/proxy', async (req, res) => {
     console.log(`[PROXY] Content type: ${response.headers['content-type']}`);
     
     res.set('Content-Type', 'text/html');
-    res.send(response.data);  } catch (error) {
+    res.send(response.data);
+  } catch (error) {
     console.error('[PROXY] Error fetching URL:', error.message);
     
     // More detailed error logging to help with debugging
@@ -84,9 +82,20 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Root health check endpoint
+// Root health check endpoint - this is what Railway will check
 app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Also respond to root with a health check
+app.get('/', (req, res, next) => {
+  // If requesting root path directly for health check
+  const acceptHeader = req.headers.accept || '';
+  if (acceptHeader.includes('application/json')) {
+    return res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  }
+  // Otherwise continue to serve the app
+  next();
 });
 
 // Serve React app for all other routes
@@ -108,4 +117,13 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`[SERVER] Listening on all interfaces (0.0.0.0)`);
   console.log(`[SERVER] Environment: ${IS_PRODUCTION ? 'Production' : 'Development'}`);
   console.log(`[SERVER] Started at: ${new Date().toISOString()}`);
+});
+
+// Handle shutdown gracefully
+process.on('SIGINT', () => {
+  console.log('Shutting down server gracefully...');
+  server.close(() => {
+    console.log('Server shut down');
+    process.exit(0);
+  });
 });
