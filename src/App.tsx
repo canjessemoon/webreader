@@ -18,7 +18,7 @@ import speechService from './services/speechService';
 import injectCriticalStyles from './injectStyles';
 import applyPaddingToAllStates from './forceAllStatePadding';
 import { monitorAndFixPadding } from './fixPaddingOnLoad';
-import { ContentExtractionErrorType } from './services/errorHandling';
+import { NETWORK_ERROR, CORS_ERROR, TIMEOUT_ERROR, EMPTY_CONTENT, UNKNOWN_ERROR, type ContentExtractionErrorType } from './services/errorHandling';
 
 // Types
 import { ReadingStatus } from './types';
@@ -31,7 +31,7 @@ function App() {
   const [status, setStatus] = useState<ReadingStatus>(ReadingStatus.Idle);
   const [currentPosition, setCurrentPosition] = useState<number>(0);
   const [showStatus, setShowStatus] = useState<boolean>(false);
-  const [errorType, setErrorType] = useState<ContentExtractionErrorType>(ContentExtractionErrorType.UNKNOWN_ERROR);
+  const [errorType, setErrorType] = useState<ContentExtractionErrorType>(UNKNOWN_ERROR);
   
   // Voice settings state
   const [voiceSettings, setVoiceSettings] = useState<VoiceSettingsType>({
@@ -86,22 +86,21 @@ function App() {
       setStatus(ReadingStatus.Ready);
       
       if (!extractedContent || extractedContent.trim() === '') {
-        setErrorType(ContentExtractionErrorType.EMPTY_CONTENT);
+        setErrorType(EMPTY_CONTENT);
       }
     } catch (error) {
       console.error('Error extracting content:', error);
       setStatus(ReadingStatus.Error);
       
       // Determine error type based on the error
-      if (error instanceof Error) {
-        if (error.message.includes('CORS')) {
-          setErrorType(ContentExtractionErrorType.CORS_ERROR);
+      if (error instanceof Error) {        if (error.message.includes('CORS')) {
+          setErrorType(CORS_ERROR);
         } else if (error.message.includes('timeout')) {
-          setErrorType(ContentExtractionErrorType.TIMEOUT_ERROR);
+          setErrorType(TIMEOUT_ERROR);
         } else if (error.message.includes('Network')) {
-          setErrorType(ContentExtractionErrorType.NETWORK_ERROR);
+          setErrorType(NETWORK_ERROR);
         } else {
-          setErrorType(ContentExtractionErrorType.UNKNOWN_ERROR);
+          setErrorType(UNKNOWN_ERROR);
         }
       }
     }
