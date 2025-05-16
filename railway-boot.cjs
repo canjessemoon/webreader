@@ -45,7 +45,12 @@ appendLog(`Node version: ${process.version}`);
 appendLog(`PORT: ${PORT}`);
 
 // Determine which server file to use
-let serverFile = 'server-railway.js';
+let serverFile = 'server-railway.cjs';
+if (!fs.existsSync(path.join(__dirname, serverFile))) {
+  console.log('server-railway.cjs not found, trying server-railway.js');
+  appendLog('server-railway.cjs not found, trying server-railway.js');
+  serverFile = 'server-railway.js';
+}
 if (!fs.existsSync(path.join(__dirname, serverFile))) {
   console.log('server-railway.js not found, falling back to server.js');
   appendLog('server-railway.js not found, falling back to server.js');
