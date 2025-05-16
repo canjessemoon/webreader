@@ -17,6 +17,15 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../dist')));
 }
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
 // Proxy endpoint
 app.get('/api/proxy', async (req, res) => {
   const url = req.query.url;
@@ -44,24 +53,15 @@ app.get('/api/proxy', async (req, res) => {
   }
 });
 
+// Integrate the deployment helper endpoints
+require('./deploymentHelper')(app);
+
 // Handle React routing in production
 if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
   });
 }
-
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
-});
-
-// Integrate the deployment helper endpoints
-require('./deploymentHelper')(app);
 
 app.listen(PORT, () => {
   console.log(`CORS Proxy Server running on port ${PORT}`);
