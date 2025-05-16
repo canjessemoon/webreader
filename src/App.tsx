@@ -9,6 +9,8 @@ import ContentDisplay from './components/ContentDisplay';
 import TTSControls from './components/TTSControls';
 import VoiceSettings from './components/VoiceSettings';
 import AppearanceSettings from './components/AppearanceSettings';
+import StatusPage from './components/StatusPage';
+import DeploymentHelper from './components/DeploymentHelper';
 
 // Services
 import { extractContent } from './services/contentService';
@@ -16,6 +18,7 @@ import speechService from './services/speechService';
 import injectCriticalStyles from './injectStyles';
 import applyPaddingToAllStates from './forceAllStatePadding';
 import { monitorAndFixPadding } from './fixPaddingOnLoad';
+import { ContentExtractionErrorType } from './services/errorHandling';
 
 // Types
 import { ReadingStatus } from './types';
@@ -24,9 +27,11 @@ import type { VoiceSettings as VoiceSettingsType, Theme } from './types';
 function App() {
   // State for content and reading status
   const [content, setContent] = useState<string>('');
-  const [, setUrl] = useState<string>(''); // URL state is set but not directly used
+  const [url, setUrl] = useState<string>(''); 
   const [status, setStatus] = useState<ReadingStatus>(ReadingStatus.Idle);
   const [currentPosition, setCurrentPosition] = useState<number>(0);
+  const [showStatus, setShowStatus] = useState<boolean>(false);
+  const [errorType, setErrorType] = useState<ContentExtractionErrorType>(ContentExtractionErrorType.UNKNOWN_ERROR);
   
   // Voice settings state
   const [voiceSettings, setVoiceSettings] = useState<VoiceSettingsType>({
@@ -79,9 +84,26 @@ function App() {
       const extractedContent = await extractContent(submittedUrl);
       setContent(extractedContent);
       setStatus(ReadingStatus.Ready);
+      
+      if (!extractedContent || extractedContent.trim() === '') {
+        setErrorType(ContentExtractionErrorType.EMPTY_CONTENT);
+      }
     } catch (error) {
       console.error('Error extracting content:', error);
       setStatus(ReadingStatus.Error);
+      
+      // Determine error type based on the error
+      if (error instanceof Error) {
+        if (error.message.includes('CORS')) {
+          setErrorType(ContentExtractionErrorType.CORS_ERROR);
+        } else if (error.message.includes('timeout')) {
+          setErrorType(ContentExtractionErrorType.TIMEOUT_ERROR);
+        } else if (error.message.includes('Network')) {
+          setErrorType(ContentExtractionErrorType.NETWORK_ERROR);
+        } else {
+          setErrorType(ContentExtractionErrorType.UNKNOWN_ERROR);
+        }
+      }
     }
   };
   
@@ -176,6 +198,16 @@ function App() {
             status={status}
             currentPosition={currentPosition}
             fontSize={theme.fontSize}
+            errorType={errorType}
+            url={url}
+            onRetry={() => handleUrlSubmit(url)}
+            onTryDifferentProxy={() => {
+              // Update the proxy service and retry
+              import('./services/proxyService').then(module => {
+                module.cycleProxy();
+                handleUrlSubmit(url);
+              });
+            }}
           />
         </div>
         
@@ -214,7 +246,26 @@ function App() {
       
       <footer className="max-w-6xl mx-auto text-center py-6 text-gray-500 dark:text-gray-400 text-sm border-t border-gray-200 dark:border-gray-800 mt-4">
         <p>WebReader - A Text-to-Speech Web Content Reader</p>
+        <div className="flex justify-center gap-4 mt-2">
+          <button 
+            onClick={() => setShowStatus(!showStatus)} 
+            className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+          >
+            {showStatus ? 'Hide Status' : 'Show System Status'}
+          </button>
+        </div>
+        {showStatus && (
+          <div className="mt-4">
+            <StatusPage showInProduction={false} />
+          </div>
+        )}
+        
+        <DeploymentHelper />
       </footer>
+      
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 mb-12">
+        {/* The status page will appear here when activated */}
+      </div>
     </div>
   )
 }

@@ -22,11 +22,12 @@ Healthcheck failed!
 1. **Updated Railway Configuration**
    - Changed healthcheck path to `/healthz` in `railway.json`
    - Added multiple health check endpoints to cover all possibilities
-   - Created a boot script (`railway-boot.sh`) to ensure proper startup
+   - Created a JavaScript boot script (`railway-boot.js`) to ensure proper startup and avoid permission issues with shell scripts
 
 2. **Added CommonJS Server Alternative**
    - Created `server-railway.js` as a CommonJS version of our server
    - Boot script tries this version first before falling back to ES Modules
+   - Added robust health check functionality to the boot script
 
 3. **Enhanced Port Binding**
    - Updated server to bind to `0.0.0.0` to listen on all interfaces

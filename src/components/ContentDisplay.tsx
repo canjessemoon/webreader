@@ -1,11 +1,17 @@
 import React, { useRef, useEffect } from 'react';
 import { ReadingStatus } from '../types';
+import FallbackContent from './FallbackContent';
+import { ContentExtractionErrorType } from '../services/errorHandling';
 
 interface ContentDisplayProps {
   content: string;
   status: ReadingStatus;
   currentPosition: number;
   fontSize: string;
+  errorType?: ContentExtractionErrorType;
+  url?: string;
+  onRetry?: () => void;
+  onTryDifferentProxy?: () => void;
 }
 
 /**
@@ -17,6 +23,10 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({
   status,
   currentPosition,
   fontSize,
+  errorType,
+  url,
+  onRetry,
+  onTryDifferentProxy
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const isReady = status !== ReadingStatus.Idle && status !== ReadingStatus.Loading && status !== ReadingStatus.Error;
@@ -116,19 +126,25 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({
             <span className="ml-4 text-gray-600 dark:text-gray-300 text-lg">Loading content...</span>
           </div>
         )}
-        
-        {status === ReadingStatus.Error && (
-          <div className="text-center text-red-600 dark:text-red-400 py-12 text-container" style={contentWrapperStyles}>
-            <p className="text-2xl mb-3 font-semibold content-text">Failed to extract content</p>
-            <p className="text-gray-600 dark:text-gray-400 max-w-lg mx-auto content-text">
-              Please check the URL and try again. The website might be blocking content extraction or require authentication.
-            </p>
+          {status === ReadingStatus.Error && (
+          <div className="text-container" style={contentWrapperStyles}>
+            <FallbackContent 
+              errorType={errorType || ContentExtractionErrorType.UNKNOWN_ERROR}
+              url={url}
+              onRetry={onRetry}
+              onTryDifferentProxy={onTryDifferentProxy}
+            />
           </div>
         )}
         
         {isReady && content === '' && (
-          <div className="text-center text-gray-500 dark:text-gray-400 py-12 text-container" style={contentWrapperStyles}>
-            <p className="text-lg content-text">No content found on this page.</p>
+          <div className="text-container" style={contentWrapperStyles}>
+            <FallbackContent 
+              errorType={ContentExtractionErrorType.EMPTY_CONTENT}
+              url={url}
+              onRetry={onRetry}
+              onTryDifferentProxy={onTryDifferentProxy}
+            />
           </div>
         )}
         

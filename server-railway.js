@@ -94,6 +94,24 @@ app.get('/healthz', (req, res) => {
   });
 });
 
+// Also register the healthcheck at Railway's default paths
+app.get('/_health', (req, res) => {
+  console.log('[HEALTH] Health check requested at /_health');
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Add standard '/health' endpoint (no underscore)
+app.get('/health', (req, res) => {
+  console.log('[HEALTH] Health check requested at /health');
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Also add /readiness and /liveness endpoints for Kubernetes-style health checks
 app.get('/readiness', (req, res) => {
   console.log('[HEALTH] Readiness check requested');

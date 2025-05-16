@@ -1,6 +1,22 @@
 # Railway Redeployment Guide (Updated May 15, 2025)
 
-Follow these steps to redeploy your WebReader application on Railway with the fixes for both the content extraction issues and the healthcheck failures.
+Follow these steps to redeploy your WebReader application on Railway with the enhanced fixes for content extraction issues, health check failures, and server boot reliability.
+
+## Key Improvements in This Update
+
+1. **Enhanced Health Check System**
+   - Multiple fallback health check endpoints (`/healthz`, `/health`, `/_health`)
+   - More resilient health check verification in the boot script
+   - Exponential backoff for health check retries
+
+2. **Improved Boot Process**
+   - JavaScript-based boot script that avoids shell permission issues
+   - Better error handling and logging
+   - Direct server process management
+
+3. **Validation Tools**
+   - Added `validate-railway-deployment.ps1` to check your configuration
+   - Enhanced `test-railway-local.ps1` for local testing
 
 ## 1. Update Your Deployment on Railway
 
@@ -79,11 +95,32 @@ Railway provides excellent logging capabilities:
 
 ## 6. Testing Locally Before Deployment
 
-You can test the Railway configuration locally before deploying:
+You should test your Railway configuration locally before deploying to catch any issues:
 
-1. Run the included PowerShell script:
+### Validate Your Configuration 
+
+First, validate your deployment configuration:
+
+1. Run the validation script:
+   ```powershell
+   .\validate-railway-deployment.ps1
+   ```
+
+2. This will check all required files, configuration settings, and server setup.
+3. Fix any issues identified by the validation script before proceeding.
+
+### Test Local Deployment
+
+Next, test the actual boot process and server startup:
+
+1. Run the test script:
    ```powershell
    .\test-railway-local.ps1
+   ```
+   
+   Or, if you've already built the project:
+   ```powershell
+   .\test-railway-local.ps1 -NoBuild
    ```
 
 2. This will:

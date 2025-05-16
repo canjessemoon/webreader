@@ -6,6 +6,9 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Add JSON parsing middleware
+app.use(express.json());
+
 // Enable CORS for all routes
 app.use(cors());
 
@@ -47,6 +50,18 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
   });
 }
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
+// Integrate the deployment helper endpoints
+require('./deploymentHelper')(app);
 
 app.listen(PORT, () => {
   console.log(`CORS Proxy Server running on port ${PORT}`);
